@@ -30,15 +30,15 @@ class _QuranState extends State<QuranPage>{
   final list=s.data!.where((v)=>(selected==null||v.surah==selected)&&(search.isEmpty||v.text.contains(search))).toList();
   return Column(children:[
    Padding(padding:const EdgeInsets.all(12),child:Column(children:[
-    DropdownButtonFormField<int>(value:selected,decoration:const InputDecoration(labelText:'اختر السورة'),items:[
+    DropdownButtonFormField<int>(initialValue:selected,decoration:const InputDecoration(labelText:'اختر السورة'),items:[
       const DropdownMenuItem<int>(value:null,child:Text('كل السور')),
-      ...List.generate(114,(i)=>DropdownMenuItem<int>(value:i+1,child:Text('السورة '+(i+1).toString())))],
+      ...List.generate(114,(i)=>DropdownMenuItem<int>(value:i+1,child:Text('السورة ${i+1}')))],
       onChanged:(v)=>setState(()=>selected=v)),
     TextField(decoration:const InputDecoration(labelText:'بحث في القرآن',prefixIcon:Icon(Icons.search)),onChanged:(v)=>setState(()=>search=v.trim())),
    ])),
    Expanded(child:ListView.builder(itemCount:list.length,itemBuilder:(context,i){final v=list[i];return Card(child:ListTile(
     title:SelectableText(v.text,style:const TextStyle(fontSize:25,height:1.8)),
-    subtitle:Text('سورة '+v.surah.toString()+' — آية '+v.ayah.toString()),
+    subtitle:Text('سورة ${v.surah} — آية ${v.ayah}'),
     trailing:IconButton(icon:const Icon(Icons.bookmark_add_outlined),onPressed:()async{
      final p=await SharedPreferences.getInstance();await p.setInt('last_surah',v.surah);await p.setInt('last_ayah',v.ayah);
     })));})),
@@ -68,5 +68,5 @@ class _ProfileState extends State<ProfilePage>{
  CheckboxListTile(value:consent,onChanged:(v)=>setState(()=>consent=v??false),title:const Text('أوافق على الحفظ المحلي')),
  FilledButton(onPressed:consent?_save:null,child:const Text('حفظ اختياري')),
  TextButton(onPressed:_erase,child:const Text('حذف بياناتي')),
- ]))));
+ ])));
 }

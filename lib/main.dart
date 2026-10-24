@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 void main() => runApp(const NoorApp());
 
@@ -36,7 +37,8 @@ class QuranRepository {
     final verses = (doc['verses'] as List<dynamic>)
         .map((v) => Verse.fromJson(v as Map<String, dynamic>))
         .toList(growable: false);
-    if (doc['surah_count'] != 114 ||
+    if (doc['source'] != 'Tanzil Project' ||
+        doc['surah_count'] != 114 ||
         doc['verse_count'] != 6236 ||
         verses.length != 6236 ||
         surahNames.length != 114) {
@@ -71,7 +73,7 @@ class _NoorAppState extends State<NoorApp> {
     if (!mounted) return;
     setState(() {
       themeMode = p.getBool('dark_mode') == true ? ThemeMode.dark : ThemeMode.light;
-      fontSize = p.getDouble('font_size') ?? 25;
+      fontSize = (p.getDouble('font_size') ?? 25).clamp(18.0, 40.0);
       bookmarks = (p.getStringList('bookmarks') ?? []).toSet();
       final s = p.getInt('last_surah');
       final a = p.getInt('last_ayah');
@@ -83,7 +85,7 @@ class _NoorAppState extends State<NoorApp> {
     setState(() {
       if (!bookmarks.add(v.key)) bookmarks.remove(v.key);
     });
-    (await SharedPreferences.getInstance()).setStringList('bookmarks', bookmarks.toList());
+    await (await SharedPreferences.getInstance()).setStringList('bookmarks', bookmarks.toList());
   }
 
   Future<void> _remember(Verse v) async {
@@ -104,7 +106,7 @@ class _NoorAppState extends State<NoorApp> {
         onBookmark: _bookmark,
         onRead: _remember,
       ),
-    ));
+    )).then((_) { if (mounted) setState(() {}); });
   }
 
   @override
@@ -243,37 +245,20 @@ class _ReaderPageState extends State<ReaderPage> {
   late final List<Verse> items = widget.verses
       .where((v) => widget.surah == null || v.surah == widget.surah)
       .toList(growable: false);
-  late final ScrollController controller = ScrollController();
-  @override
-  void initState() {
-    super.initState();
-    if (widget.jumpTo != null) {
-      final target = items.indexWhere((v) => v.key == widget.jumpTo);
-      if (target >= 0) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted && controller.hasClients) {
-            final offset = (target * 160.0).clamp(0.0, controller.position.maxScrollExtent);
-            controller.jumpTo(offset);
-          }
-        });
-      }
-    }
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
+  final ItemScrollController controller = ItemScrollController();
+  late final int initialIndex = widget.jumpTo == null ? 0 : (() {
+    final index = items.indexWhere((v) => v.key == widget.jumpTo);
+    return index < 0 ? 0 : index;
+  })();
   @override
   Widget build(BuildContext context) => Directionality(
     textDirection: TextDirection.rtl,
     child: Scaffold(
       appBar: AppBar(title: Text(widget.surah == null
           ? 'المصحف الشريف' : 'سورة ${surahNames[widget.surah! - 1]}')),
-      body: ListView.builder(
-        controller: controller,
+      body: ScrollablePositionedList.builder(
+        itemScrollController: controller,
+        initialScrollIndex: initialIndex,
         itemCount: items.length,
         itemBuilder: (context, i) {
           final v = items[i];
@@ -362,9 +347,9 @@ class AboutPage extends StatelessWidget {
       Text('النص القرآني من مشروع Tanzil؛ النص محفوظ دون تعديل.'),
       SelectableText('https://tanzil.net/'),
       SizedBox(height: 12),
-      Text('ترخيص النص: Creative Commons Attribution 3.0. يجب حفظ إشعار المصدر والحقوق عند إعادة توزيع النص.'),
+      Text('ترخيص النص: Creative Commons Attribution 3.0. النص من Tanzil Project، حقوق النشر © 2007–2021 Tanzil Project. يُسمح بتوزيع نسخ مطابقة للنص، ولا يُسمح بتغيير النص القرآني. يجب ذكر المصدر وإرفاق الرابط https://tanzil.net/ وإشعار الحقوق في النسخ الموزعة.'),
       SizedBox(height: 16),
       Text('نور القرآن تطبيق مستقل، غير تابع لمشروع Quran.tv.'),
-      Text('لا يلزم إنشاء حساب لاستخدام التطبيق؛ التفضيلات تُحفظ على الجهاز فقط.'),
+      Text('لا يلزم إنشاء حساب لاستخدام التطبيق؛ التفضيلات والعلامات المرجعية تُحفظ على الجهاز فقط. لا يطلب هذا الإصدار اسمًا أو هاتفًا أو بريدًا إلكترونيًا.'),
     ]);
 }

@@ -70,7 +70,10 @@ class _MushafPagesPageState extends State<MushafPagesPage> {
     future: navigation,
     builder: (context, snapshot) {
       if (snapshot.hasError) {
-        return const Scaffold(body: Center(child: Text('تعذر التحقق من فهرس صفحات المصحف')));
+        return Scaffold(body: Center(child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: SelectableText('تعذر تحميل فهرس المصحف: ${snapshot.error}', textAlign: TextAlign.center),
+        )));
       }
       if (!snapshot.hasData) {
         return const Scaffold(body: Center(child: CircularProgressIndicator()));
@@ -78,6 +81,10 @@ class _MushafPagesPageState extends State<MushafPagesPage> {
       final nav = snapshot.data!;
       final start = nav.pages[page - 1] - 1;
       final end = page == 604 ? widget.verses.length : nav.pages[page] - 1;
+      if (start < 0 || end > widget.verses.length || start >= end) {
+        return Scaffold(appBar: AppBar(title: const Text('المصحف')),
+          body: Center(child: Text('بيانات الصفحة $page غير صالحة. يرجى إبلاغ المطور.')));
+      }
       final current = widget.verses.sublist(start, end);
       final first = current.first;
       final ink = night ? const Color(0xFFF5EED9) : const Color(0xFF302419);

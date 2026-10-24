@@ -175,7 +175,7 @@ class _MushafPagesPageState extends State<MushafPagesPage> {
                               icon: const Icon(Icons.history, size: 21),
                               onPressed: () async {
                                 await widget.onRead(verse);
-                                if (mounted) {
+                                if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(content: Text('تم حفظ موضع القراءة')));
                                 }

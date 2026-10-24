@@ -306,7 +306,7 @@ class _ReaderPageState extends State<ReaderPage> {
                 ),
               );
               input.dispose();
-              if (!mounted || target == null || target < 1) return;
+              if (!context.mounted || target == null || target < 1) return;
               final index = items.indexWhere((v) =>
                 v.ayah == target && (widget.surah == null || v.surah == widget.surah));
               if (index < 0) {

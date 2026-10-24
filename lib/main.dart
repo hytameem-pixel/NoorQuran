@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'memorization.dart';
 import 'islamic_library.dart';
+import 'local_data.dart';
 
 void main() => runApp(const NoorApp());
 
@@ -200,6 +201,13 @@ class _NoorAppState extends State<NoorApp> {
                     subtitle: const Text('قسم حفظ القرآن للصغار بإشراف ولي الأمر'),
                     onTap: () => Navigator.push(context, MaterialPageRoute<void>(
                       builder: (_) => MemorizationPage(verses: verses, kidsMode: true))),
+                  )),
+                  Card.filled(child: ListTile(
+                    leading: const Icon(Icons.backup_outlined),
+                    title: const Text('نسخ بيانات الحفظ والقراءة واستعادتها'),
+                    subtitle: const Text('احتفظ بعلاماتك وتقدم الحفظ عند تغيير الهاتف'),
+                    onTap: () => Navigator.push(context, MaterialPageRoute<void>(
+                      builder: (_) => const LocalDataPage())),
                   )),
                   Card.filled(child: ListTile(
                     leading: const Icon(Icons.local_library_outlined),

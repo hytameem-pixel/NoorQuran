@@ -8,6 +8,7 @@ import 'islamic_library.dart';
 import 'local_data.dart';
 import 'mushaf_pages.dart';
 import 'quranic_duas.dart';
+import 'quran_diagnostics.dart';
 
 void main() => runApp(const NoorApp());
 
@@ -193,6 +194,13 @@ class _NoorAppState extends State<NoorApp> {
                   const SizedBox(height: 10),
                   const Text('المصحف الشريف متاح دون إنترنت أو تسجيل دخول.'),
                   const SizedBox(height: 16),
+                  Card(child: ListTile(
+                    leading: const Icon(Icons.build_circle_outlined),
+                    title: const Text('فحص المصحف والصوتيات'),
+                    subtitle: const Text('تحقق من ملفات المصحف واعرض أسباب الأعطال'),
+                    onTap: () => Navigator.push(context, MaterialPageRoute<void>(
+                      builder: (_) => const QuranDiagnosticsPage())),
+                  )),
                   Card.filled(child: ListTile(
                     leading: const Icon(Icons.chrome_reader_mode_outlined),
                     title: const Text('فهرس صفحات مصحف المدينة'),

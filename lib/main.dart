@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'memorization.dart';
 import 'islamic_library.dart';
+import 'local_data.dart';
+import 'mushaf_pages.dart';
 
 void main() => runApp(const NoorApp());
 
@@ -45,6 +47,24 @@ class QuranRepository {
         verses.length != 6236 ||
         surahNames.length != 114) {
       throw const FormatException('Incomplete Quran data');
+    }
+    // Fail closed if any verse is missing, duplicated, or out of order.
+    var previousSurah = 1;
+    var previousAyah = 0;
+    for (final verse in verses) {
+      if (verse.surah < 1 || verse.surah > 114 ||
+          verse.ayah < 1 || verse.text.trim().isEmpty ||
+          verse.surah < previousSurah ||
+          verse.surah > previousSurah + 1 ||
+          (verse.surah == previousSurah && verse.ayah != previousAyah + 1) ||
+          (verse.surah == previousSurah + 1 && verse.ayah != 1)) {
+        throw const FormatException('Quran verse sequence failed validation');
+      }
+      previousSurah = verse.surah;
+      previousAyah = verse.ayah;
+    }
+    if (previousSurah != 114) {
+      throw const FormatException('Incomplete final surah');
     }
     return verses;
   }
@@ -173,6 +193,18 @@ class _NoorAppState extends State<NoorApp> {
                   const Text('المصحف الشريف متاح دون إنترنت أو تسجيل دخول.'),
                   const SizedBox(height: 16),
                   Card.filled(child: ListTile(
+                    leading: const Icon(Icons.chrome_reader_mode_outlined),
+                    title: const Text('فهرس صفحات مصحف المدينة'),
+                    subtitle: const Text('604 موضع صفحة • عرض الآيات كاملة • الوضع الليلي'),
+                    onTap: () => Navigator.push(context, MaterialPageRoute<void>(
+                      builder: (_) => MushafPagesPage(
+                        verses: verses,
+                        bookmarked: (v) => bookmarks.contains(v.key),
+                        onBookmark: _bookmark,
+                        onRead: _remember,
+                      ))).then((_) { if (mounted) setState(() {}); }),
+                  )),
+                  Card.filled(child: ListTile(
                     leading: const Icon(Icons.auto_stories),
                     title: const Text('المصحف الشريف'),
                     subtitle: const Text('١١٤ سورة • النص العثماني'),
@@ -200,6 +232,13 @@ class _NoorAppState extends State<NoorApp> {
                     subtitle: const Text('قسم حفظ القرآن للصغار بإشراف ولي الأمر'),
                     onTap: () => Navigator.push(context, MaterialPageRoute<void>(
                       builder: (_) => MemorizationPage(verses: verses, kidsMode: true))),
+                  )),
+                  Card.filled(child: ListTile(
+                    leading: const Icon(Icons.backup_outlined),
+                    title: const Text('نسخ بيانات الحفظ والقراءة واستعادتها'),
+                    subtitle: const Text('احتفظ بعلاماتك وتقدم الحفظ عند تغيير الهاتف'),
+                    onTap: () => Navigator.push(context, MaterialPageRoute<void>(
+                      builder: (_) => const LocalDataPage())),
                   )),
                   Card.filled(child: ListTile(
                     leading: const Icon(Icons.local_library_outlined),

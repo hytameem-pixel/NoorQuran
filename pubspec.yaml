@@ -17,3 +17,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/content/quran/quran.json
+    - assets/content/quran/hafs_navigation.json

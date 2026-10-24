@@ -1,0 +1,28 @@
+name: Import verified Tanzil Quran
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download official Tanzil text
+        run: python tools/import_tanzil_quran.py
+      - name: Verify source and Quran structure
+        run: python tools/verify_quran_bundle.py
+      - name: Commit verified Quran bundle
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/content/quran/quran.json assets/content/quran/quran-uthmani.txt
+          if ! git diff --cached --quiet; then
+            git commit -m "Import Tanzil Uthmani Quran text with source checksum"
+            git push
+          fi

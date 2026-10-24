@@ -184,7 +184,8 @@ class _NoorAppState extends State<NoorApp> {
         body: FutureBuilder<List<Verse>>(
           future: versesFuture,
           builder: (context, snapshot) {
-            if (snapshot.hasError) return Center(child: Padding(
+            if (snapshot.hasError) {
+              return Center(child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(mainAxisSize: MainAxisSize.min, children: [
                 const Text('تعذر فتح المصحف. استخدم الفحص لمعرفة السبب.'),
@@ -195,6 +196,7 @@ class _NoorAppState extends State<NoorApp> {
                 ),
               ]),
             ));
+            }
             if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
             final verses = snapshot.data!;
             switch (tab) {

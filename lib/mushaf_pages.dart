@@ -16,7 +16,8 @@ class MushafNavigation {
     final p = list('pages'), j = list('juz'), q = list('quarters');
     bool valid(List<int> values, int expected) =>
       values.length == expected && values.first == 1 &&
-      values.last <= 6236 && values.asMap().entries.skip(1)
+      values.last <= 6236 && values.every((v) => v >= 1 && v <= 6236) &&
+      values.asMap().entries.skip(1)
         .every((entry) => entry.value > values[entry.key - 1]);
     if (data['riwaya'] != 'Hafs' ||
         !valid(p, 604) || !valid(j, 30) || !valid(q, 240)) {
@@ -70,7 +71,8 @@ class _MushafPagesPageState extends State<MushafPagesPage> {
     future: navigation,
     builder: (context, snapshot) {
       if (snapshot.hasError) {
-        return Scaffold(body: Center(child: Padding(
+        return Scaffold(appBar: AppBar(title: const Text('المصحف')),
+          body: Center(child: Padding(
           padding: const EdgeInsets.all(20),
           child: SelectableText('تعذر تحميل فهرس المصحف: ${snapshot.error}', textAlign: TextAlign.center),
         )));

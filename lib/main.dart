@@ -243,9 +243,7 @@ class _ReaderPageState extends State<ReaderPage> {
   late final List<Verse> items = widget.verses
       .where((v) => widget.surah == null || v.surah == widget.surah)
       .toList(growable: false);
-  late final ScrollController controller = ScrollController(
-    initialScrollOffset: 0,
-  );
+  late final ScrollController controller = ScrollController();
   @override
   void initState() {
     super.initState();
@@ -254,7 +252,8 @@ class _ReaderPageState extends State<ReaderPage> {
       if (target >= 0) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted && controller.hasClients) {
-            controller.jumpTo(target * 160.0);
+            final offset = (target * 160.0).clamp(0.0, controller.position.maxScrollExtent);
+            controller.jumpTo(offset);
           }
         });
       }

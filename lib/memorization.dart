@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'main.dart' show Verse, surahNames;
+import 'local_recitation.dart';
 
 class MemorizationPage extends StatefulWidget {
   final List<Verse> verses;
@@ -119,9 +120,9 @@ class _MemorizationPageState extends State<MemorizationPage> {
                 },
               ),
             ]),
-            const Text('الاستماع والتكرار الصوتي يحتاجان إلى تسجيلات معتمدة وحقوق استخدام واضحة. لم تُضف تسجيلات غير مرخصة.'),
+            const Text('يمكن تشغيل ملف صوتي من هاتفك دون تحميل تسجيلات غير مرخصة.'),
             Row(children: [
-              const Expanded(child: Text('التكرارات الصوتية عند تفعيل المصدر')),
+              const Expanded(child: Text('عدد مرات تكرار الملف المختار')),
               DropdownButton<int>(
                 value: repeats,
                 items: [1, 2, 3, 5, 7, 10]
@@ -134,6 +135,7 @@ class _MemorizationPageState extends State<MemorizationPage> {
               ),
             ]),
             const SizedBox(height: 12),
+            LocalRecitationPlayer(key: ValueKey(repeats), repeats: repeats),
             LinearProgressIndicator(value: progress, minHeight: 10, borderRadius: BorderRadius.circular(8)),
             const SizedBox(height: 6),
             Text('تم حفظ $savedCount من ${verses.length} آية — ${(progress * 100).round()}٪'),

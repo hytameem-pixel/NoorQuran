@@ -15,6 +15,7 @@ class _LocalRecitationPlayerState extends State<LocalRecitationPlayer> {
   final player = AudioPlayer();
   String? fileName;
   String? error;
+  String? status;
   bool busy = false;
 
   @override
@@ -31,11 +32,15 @@ class _LocalRecitationPlayerState extends State<LocalRecitationPlayer> {
         allowMultiple: false,
         withData: false,
       );
-      if (result == null || result.files.isEmpty) return;
+      if (result == null || result.files.isEmpty) {
+        if (mounted) setState(() => status = 'لم يتم اختيار ملف صوتي.');
+        return;
+      }
       final file = result.files.single;
       if (file.path == null) {
         throw const FormatException('Unable to access selected audio file');
       }
+      if (mounted) setState(() => status = 'جارٍ إعداد الملف الصوتي...');
       await player.stop();
       // A finite playlist repeats the chosen recording exactly N times.
       await player.setLoopMode(LoopMode.off);
@@ -43,11 +48,11 @@ class _LocalRecitationPlayerState extends State<LocalRecitationPlayer> {
         List.generate(widget.repeats, (_) => AudioSource.file(file.path!)),
       );
       if (!mounted) return;
-      setState(() => fileName = file.name);
+      setState(() { fileName = file.name; status = 'تم تحميل الملف، جارٍ تشغيله...'; });
       await player.play();
-    } catch (_) {
+    } catch (e) {
       if (mounted) {
-        setState(() => error = 'تعذر تشغيل الملف الصوتي. اختر ملف MP3 أو M4A صالحًا.');
+        setState(() => error = 'تعذر تشغيل الملف: $e');
       }
     } finally {
       if (mounted) setState(() => busy = false);
@@ -71,6 +76,7 @@ class _LocalRecitationPlayerState extends State<LocalRecitationPlayer> {
           label: Text(busy ? 'جارٍ فتح الملف' : 'اختيار تسجيل من الهاتف'),
         ),
         if (fileName != null) Text(fileName!, textAlign: TextAlign.center),
+        if (status != null) Text(status!, textAlign: TextAlign.center),
         StreamBuilder<PlayerState>(
           stream: player.playerStateStream,
           builder: (context, snapshot) {

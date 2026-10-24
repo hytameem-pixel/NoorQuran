@@ -1,0 +1,6 @@
+*.jks
+*.keystore
+key.properties
+.env
+.dart_tool/
+build/

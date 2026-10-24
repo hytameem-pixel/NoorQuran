@@ -6,6 +6,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'memorization.dart';
 import 'islamic_library.dart';
 import 'local_data.dart';
+import 'mushaf_pages.dart';
 
 void main() => runApp(const NoorApp());
 

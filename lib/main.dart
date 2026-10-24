@@ -100,7 +100,9 @@ class _NoorAppState extends State<NoorApp> {
       themeMode = p.getBool('dark_mode') == true ? ThemeMode.dark : ThemeMode.light;
       fontSize = (p.getDouble('font_size') ?? 25).clamp(18.0, 40.0);
       bookmarks = (p.getStringList('bookmarks') ?? []).where((key) =>
-        RegExp(r'^([1-9]|[1-9][0-9]|1[01][0-9]|11[0-4]):([1-9][0-9]{0,2})
+        key.contains(':') && key.split(':').length == 2 &&
+        int.tryParse(key.split(':')[0]) != null &&
+        int.tryParse(key.split(':')[1]) != null).toSet();
       final s = p.getInt('last_surah');
       final a = p.getInt('last_ayah');
       lastRead = (s != null && a != null && s >= 1 && s <= 114 &&

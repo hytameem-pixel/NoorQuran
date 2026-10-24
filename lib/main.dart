@@ -193,6 +193,18 @@ class _NoorAppState extends State<NoorApp> {
                   const Text('المصحف الشريف متاح دون إنترنت أو تسجيل دخول.'),
                   const SizedBox(height: 16),
                   Card.filled(child: ListTile(
+                    leading: const Icon(Icons.chrome_reader_mode_outlined),
+                    title: const Text('المصحف حسب صفحات المدينة'),
+                    subtitle: const Text('604 صفحة • فهرس الصفحات والأجزاء • الوضع الليلي'),
+                    onTap: () => Navigator.push(context, MaterialPageRoute<void>(
+                      builder: (_) => MushafPagesPage(
+                        verses: verses,
+                        bookmarked: (v) => bookmarks.contains(v.key),
+                        onBookmark: _bookmark,
+                        onRead: _remember,
+                      ))).then((_) { if (mounted) setState(() {}); }),
+                  )),
+                  Card.filled(child: ListTile(
                     leading: const Icon(Icons.auto_stories),
                     title: const Text('المصحف الشريف'),
                     subtitle: const Text('١١٤ سورة • النص العثماني'),

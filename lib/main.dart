@@ -7,6 +7,7 @@ import 'memorization.dart';
 import 'islamic_library.dart';
 import 'local_data.dart';
 import 'mushaf_pages.dart';
+import 'quranic_duas.dart';
 
 void main() => runApp(const NoorApp());
 
@@ -203,6 +204,13 @@ class _NoorAppState extends State<NoorApp> {
                         onBookmark: _bookmark,
                         onRead: _remember,
                       ))).then((_) { if (mounted) setState(() {}); }),
+                  )),
+                  Card.filled(child: ListTile(
+                    leading: const Icon(Icons.volunteer_activism_outlined),
+                    title: const Text('أدعية من القرآن الكريم'),
+                    subtitle: const Text('20 موضعًا من آيات الدعاء مع الإحالة إلى السورة والآية'),
+                    onTap: () => Navigator.push(context, MaterialPageRoute<void>(
+                      builder: (_) => QuranicDuasPage(verses: verses))),
                   )),
                   Card.filled(child: ListTile(
                     leading: const Icon(Icons.auto_stories),

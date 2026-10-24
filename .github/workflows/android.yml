@@ -19,6 +19,22 @@ jobs:
           channel: stable
       - name: Generate Android scaffold
         run: flutter create --platforms=android --project-name noor_quran .
+      - name: Set distinct Android application ID and Arabic label
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          gradle = Path('android/app/build.gradle.kts')
+          data = gradle.read_text()
+          data, count = re.subn(r'applicationId\s*=\s*"[^"]+"', 'applicationId = "org.noorquran.tameem.reader"', data)
+          if count != 1:
+              raise SystemExit('Expected exactly one Android applicationId')
+          gradle.write_text(data)
+          manifest = Path('android/app/src/main/AndroidManifest.xml')
+          data = manifest.read_text().replace('android:label="noor_quran"', 'android:label="نور القرآن"')
+          manifest.write_text(data)
+          print('Android ID: org.noorquran.tameem.reader')
+          PY
       - name: Remove generated sample widget test
         run: rm -f test/widget_test.dart
       - run: flutter pub get
@@ -27,8 +43,18 @@ jobs:
       - run: flutter analyze
       - run: flutter test
       - run: flutter build apk --release
+      - name: Inspect APK identity and signing
+        run: |
+          APK=build/app/outputs/flutter-apk/app-release.apk
+          test -s "$APK"
+          sha256sum "$APK" | tee apk-sha256.txt
+          "$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)/aapt" dump badging "$APK" | head -n 6
+          "$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)/apksigner" verify --verbose "$APK"
+          unzip -t "$APK" | tail -n 1
       - uses: actions/upload-artifact@v4
         with:
-          name: NoorQuran-APK-Quality-v05
-          path: build/app/outputs/flutter-apk/app-release.apk
+          name: NoorQuran-APK-Android-InstallFix-v051
+          path: |
+            build/app/outputs/flutter-apk/app-release.apk
+            apk-sha256.txt
           if-no-files-found: error

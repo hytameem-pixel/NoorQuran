@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'memorization.dart';
+import 'islamic_library.dart';
 
 void main() => runApp(const NoorApp());
 
@@ -200,6 +201,13 @@ class _NoorAppState extends State<NoorApp> {
                     onTap: () => Navigator.push(context, MaterialPageRoute<void>(
                       builder: (_) => MemorizationPage(verses: verses, kidsMode: true))),
                   )),
+                  Card.filled(child: ListTile(
+                    leading: const Icon(Icons.local_library_outlined),
+                    title: const Text('المكتبة الإسلامية'),
+                    subtitle: const Text('التفسير • معاني الكلمات • الأذكار • كتب الحديث'),
+                    onTap: () => Navigator.push(context, MaterialPageRoute<void>(
+                      builder: (_) => const IslamicLibraryPage())),
+                  )),
                   const SizedBox(height: 12),
                   const Text('سور القرآن الكريم', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   ...List.generate(114, (i) => ListTile(
@@ -270,8 +278,60 @@ class _ReaderPageState extends State<ReaderPage> {
   Widget build(BuildContext context) => Directionality(
     textDirection: TextDirection.rtl,
     child: Scaffold(
-      appBar: AppBar(title: Text(widget.surah == null
-          ? 'المصحف الشريف' : 'سورة ${surahNames[widget.surah! - 1]}')),
+      appBar: AppBar(
+        title: Text(widget.surah == null
+          ? 'المصحف الشريف' : 'سورة ${surahNames[widget.surah! - 1]}'),
+        actions: [
+          IconButton(
+            tooltip: 'الانتقال إلى آية',
+            icon: const Icon(Icons.pin_drop_outlined),
+            onPressed: () async {
+              final input = TextEditingController();
+              final target = await showDialog<int>(
+                context: context,
+                builder: (ctx) => AlertDialog(
+                  title: const Text('الانتقال إلى رقم الآية'),
+                  content: TextField(
+                    controller: input,
+                    autofocus: true,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      labelText: 'رقم الآية في السورة الحالية'),
+                  ),
+                  actions: [
+                    TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('إلغاء')),
+                    FilledButton(onPressed: () => Navigator.pop(ctx, int.tryParse(input.text)),
+                      child: const Text('انتقال')),
+                  ],
+                ),
+              );
+              input.dispose();
+              if (!mounted || target == null || target < 1) return;
+              final index = items.indexWhere((v) =>
+                v.ayah == target && (widget.surah == null || v.surah == widget.surah));
+              if (index < 0) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('رقم الآية غير موجود')));
+              } else {
+                controller.scrollTo(index: index,
+                  duration: const Duration(milliseconds: 350));
+              }
+            },
+          ),
+          IconButton(
+            tooltip: 'معلومات الحفظ',
+            icon: const Icon(Icons.info_outline),
+            onPressed: () => showDialog<void>(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                title: const Text('العلامات المرجعية'),
+                content: const Text('اضغط رمز العلامة بجانب أي آية لحفظها. يمكنك فتح العلامات من تبويب المفضلة في الصفحة الرئيسية.'),
+                actions: [TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('حسنًا'))],
+              ),
+            ),
+          ),
+        ],
+      ),
       body: ScrollablePositionedList.builder(
         itemScrollController: controller,
         initialScrollIndex: initialIndex,

@@ -19,6 +19,8 @@ jobs:
           channel: stable
       - name: Generate Android scaffold
         run: flutter create --platforms=android --project-name noor_quran .
+      - name: Remove generated sample widget test
+        run: rm -f test/widget_test.dart
       - run: flutter pub get
       - name: Verify Quran data
         run: python3 tools/verify_quran_bundle.py

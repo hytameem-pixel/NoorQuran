@@ -17,6 +17,11 @@ class _MemorizationPageState extends State<MemorizationPage> {
   Set<String> memorized = {};
   Set<String> review = {};
   bool loaded = false;
+  int dailyGoal = 3;
+  int repeats = 3;
+  Set<String> completedToday = {};
+  String get todayKey => DateTime.now().toIso8601String().substring(0, 10);
+  String get dayStorageKey => 'memorized_today_$todayKey';
 
   List<Verse> get currentVerses =>
       widget.verses.where((v) => v.surah == selectedSurah).toList(growable: false);
@@ -33,6 +38,9 @@ class _MemorizationPageState extends State<MemorizationPage> {
     setState(() {
       memorized = (prefs.getStringList('memorized_verses') ?? []).toSet();
       review = (prefs.getStringList('review_verses') ?? []).toSet();
+      dailyGoal = (prefs.getInt('memorization_daily_goal') ?? 3).clamp(1, 20);
+      repeats = (prefs.getInt('memorization_repeat_count') ?? 3).clamp(1, 10);
+      completedToday = (prefs.getStringList(dayStorageKey) ?? []).toSet();
       loaded = true;
     });
   }
@@ -41,6 +49,7 @@ class _MemorizationPageState extends State<MemorizationPage> {
     setState(() {
       if (mastered) {
         memorized.add(verse.key);
+        completedToday.add(verse.key);
         review.remove(verse.key);
       } else {
         memorized.remove(verse.key);
@@ -50,6 +59,7 @@ class _MemorizationPageState extends State<MemorizationPage> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setStringList('memorized_verses', memorized.toList());
     await prefs.setStringList('review_verses', review.toList());
+    await prefs.setStringList(dayStorageKey, completedToday.toList());
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(mastered ? 'أحسنت! تم تسجيل الآية محفوظة' : 'أضيفت الآية إلى قائمة المراجعة'),
@@ -84,13 +94,44 @@ class _MemorizationPageState extends State<MemorizationPage> {
                 value: i + 1, child: Text('سورة ${surahNames[i]}'),
               )),
               onChanged: (value) {
-                if (value != null) setState(() {
+                if (value != null) { setState(() {
                   selectedSurah = value;
                   currentIndex = 0;
                   showText = true;
-                });
+                }); }
               },
             ),
+            const SizedBox(height: 12),
+            Text('الهدف اليومي: $dailyGoal آيات • المنجز اليوم: ${completedToday.length}'),
+            LinearProgressIndicator(value: (completedToday.length / dailyGoal).clamp(0.0, 1.0),
+              minHeight: 8, borderRadius: BorderRadius.circular(8)),
+            Row(children: [
+              const Expanded(child: Text('عدد الآيات المستهدف يوميًا')),
+              DropdownButton<int>(
+                value: dailyGoal,
+                items: [1, 2, 3, 5, 7, 10, 15, 20]
+                    .map((n) => DropdownMenuItem(value: n, child: Text('$n'))).toList(),
+                onChanged: (v) async {
+                  if (v == null) return;
+                  setState(() => dailyGoal = v);
+                  await (await SharedPreferences.getInstance()).setInt('memorization_daily_goal', v);
+                },
+              ),
+            ]),
+            const Text('الاستماع والتكرار الصوتي يحتاجان إلى تسجيلات معتمدة وحقوق استخدام واضحة. لم تُضف تسجيلات غير مرخصة.'),
+            Row(children: [
+              const Expanded(child: Text('التكرارات الصوتية عند تفعيل المصدر')),
+              DropdownButton<int>(
+                value: repeats,
+                items: [1, 2, 3, 5, 7, 10]
+                    .map((n) => DropdownMenuItem(value: n, child: Text('$n'))).toList(),
+                onChanged: (v) async {
+                  if (v == null) return;
+                  setState(() => repeats = v);
+                  await (await SharedPreferences.getInstance()).setInt('memorization_repeat_count', v);
+                },
+              ),
+            ]),
             const SizedBox(height: 12),
             LinearProgressIndicator(value: progress, minHeight: 10, borderRadius: BorderRadius.circular(8)),
             const SizedBox(height: 6),

@@ -1,0 +1,32 @@
+name: NoorQuran Android build
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Generate Android scaffold
+        run: flutter create --platforms=android --project-name noor_quran .
+      - run: flutter pub get
+      - name: Verify Quran data
+        run: python3 tools/verify_quran_bundle.py
+      - run: flutter analyze
+      - run: flutter test
+      - run: flutter build apk --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: NoorQuran-APK
+          path: build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error

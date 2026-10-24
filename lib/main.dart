@@ -47,6 +47,24 @@ class QuranRepository {
         surahNames.length != 114) {
       throw const FormatException('Incomplete Quran data');
     }
+    // Fail closed if any verse is missing, duplicated, or out of order.
+    var previousSurah = 1;
+    var previousAyah = 0;
+    for (final verse in verses) {
+      if (verse.surah < 1 || verse.surah > 114 ||
+          verse.ayah < 1 || verse.text.trim().isEmpty ||
+          verse.surah < previousSurah ||
+          verse.surah > previousSurah + 1 ||
+          (verse.surah == previousSurah && verse.ayah != previousAyah + 1) ||
+          (verse.surah == previousSurah + 1 && verse.ayah != 1)) {
+        throw const FormatException('Quran verse sequence failed validation');
+      }
+      previousSurah = verse.surah;
+      previousAyah = verse.ayah;
+    }
+    if (previousSurah != 114) {
+      throw const FormatException('Incomplete final surah');
+    }
     return verses;
   }
 }

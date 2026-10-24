@@ -120,40 +120,98 @@ class _MushafPagesPageState extends State<MushafPagesPage> {
           body: Column(children: [
             Expanded(child: Container(
               color: paper,
-              child: ListView(padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16), children: [
-                Text('سورة ${surahNames[first.surah - 1]} • الجزء ${nav.juzOf(start + 1)}',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 19, color: ink, fontWeight: FontWeight.bold)),
-                const Divider(),
-                for (final verse in current)
-                  Column(children: [
-                    SelectableText(verse.text,
-                      textAlign: TextAlign.center,
-                      textDirection: TextDirection.rtl,
-                      style: TextStyle(fontSize: 25, height: 2.1, color: ink)),
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      Text('۞ ${verse.ayah}', style: TextStyle(color: ink)),
-                      IconButton(
-                        tooltip: 'حفظ موضع القراءة',
-                        color: ink,
-                        icon: const Icon(Icons.history),
-                        onPressed: () => widget.onRead(verse),
+              child: Container(
+                margin: const EdgeInsets.all(9),
+                decoration: BoxDecoration(
+                  border: Border.all(color: const Color(0xFFB59A57), width: 1.4),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Container(
+                  margin: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: const Color(0xFFB59A57).withValues(alpha: .55)),
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                  child: ListView(
+                    padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 14),
+                    children: [
+                      Text('۞  نُورُ الْقُرْآنِ  ۞',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: ink, fontSize: 15, letterSpacing: 1.4)),
+                      const SizedBox(height: 8),
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFB59A57).withValues(alpha: night ? .17 : .12),
+                          border: Border.symmetric(
+                            horizontal: BorderSide(color: const Color(0xFFB59A57), width: 1),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 5),
+                          child: Text(
+                            '﴿ سُورَةُ ${surahNames[first.surah - 1]} ﴾',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 22, color: ink, fontWeight: FontWeight.bold),
+                          ),
+                        ),
                       ),
-                      IconButton(
-                        tooltip: 'حفظ العلامة',
-                        color: ink,
-                        icon: Icon(widget.bookmarked(verse) ? Icons.bookmark : Icons.bookmark_border),
-                        onPressed: () async {
-                          await widget.onBookmark(verse);
-                          if (mounted) setState(() {});
-                        },
+                      const SizedBox(height: 12),
+                      for (final verse in current) ...[
+                        Semantics(
+                          label: 'سورة ${surahNames[verse.surah - 1]}، الآية ${verse.ayah}',
+                          child: SelectableText(
+                            '${verse.text} ۞${verse.ayah}',
+                            textAlign: TextAlign.justify,
+                            textDirection: TextDirection.rtl,
+                            style: TextStyle(fontSize: 26, height: 2.05, color: ink),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            IconButton(
+                              tooltip: 'تحديد موضع القراءة عند الآية ${verse.ayah}',
+                              color: ink,
+                              icon: const Icon(Icons.history, size: 21),
+                              onPressed: () async {
+                                await widget.onRead(verse);
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('تم حفظ موضع القراءة')));
+                                }
+                              },
+                            ),
+                            IconButton(
+                              tooltip: 'إضافة أو إزالة علامة الآية ${verse.ayah}',
+                              color: ink,
+                              icon: Icon(
+                                widget.bookmarked(verse) ? Icons.bookmark : Icons.bookmark_border,
+                                size: 21,
+                              ),
+                              onPressed: () async {
+                                await widget.onBookmark(verse);
+                                if (mounted) setState(() {});
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                      const SizedBox(height: 12),
+                      Divider(color: const Color(0xFFB59A57).withValues(alpha: .6)),
+                      Text(
+                        'الجزء ${nav.juzOf(start + 1)}  •  ربع الحزب ${nav.quarterOf(start + 1)}',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: ink, fontSize: 14),
                       ),
-                    ]),
-                  ]),
-                const SizedBox(height: 8),
-                Text('صفحة $page من 604', textAlign: TextAlign.center,
-                  style: TextStyle(color: ink)),
-              ]),
+                      Text(
+                        '﴿ $page ﴾',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: ink, fontSize: 19, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             )),
             SafeArea(top: false, child: Row(children: [
               IconButton(

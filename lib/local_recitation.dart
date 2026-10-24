@@ -82,6 +82,9 @@ class _LocalRecitationPlayerState extends State<LocalRecitationPlayer> {
                   if (playing) {
                     await player.pause();
                   } else {
+                    if (player.processingState == ProcessingState.completed) {
+                      await player.seek(Duration.zero, index: 0);
+                    }
                     await player.play();
                   }
                 },

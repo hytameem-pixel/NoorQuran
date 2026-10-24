@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
@@ -17,15 +18,34 @@ class _LocalRecitationPlayerState extends State<LocalRecitationPlayer> {
   String? error;
   String? status;
   bool busy = false;
+  StreamSubscription<PlayerState>? playbackSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    playbackSubscription = player.playerStateStream.listen((state) {
+      if (!mounted || fileName == null) return;
+      if (state.processingState == ProcessingState.completed) {
+        setState(() => status = 'انتهى تشغيل التسجيل. اضغط تشغيل للإعادة.');
+      } else if (state.playing && state.processingState == ProcessingState.ready) {
+        setState(() => status = 'التلاوة قيد التشغيل');
+      }
+    }, onError: (Object e) {
+      if (mounted) setState(() => error = 'خطأ في مشغل الصوت: $e');
+    });
+  }
+
 
   @override
   void dispose() {
+    playbackSubscription?.cancel();
     player.dispose();
     super.dispose();
   }
 
   Future<void> _chooseAudio() async {
-    setState(() { busy = true; error = null; });
+    if (busy) return;
+    setState(() { busy = true; error = null; status = null; });
     try {
       final result = await FilePicker.platform.pickFiles(
         type: FileType.audio,
@@ -49,7 +69,9 @@ class _LocalRecitationPlayerState extends State<LocalRecitationPlayer> {
       );
       if (!mounted) return;
       setState(() { fileName = file.name; status = 'تم تحميل الملف، جارٍ تشغيله...'; });
-      await player.play();
+      unawaited(player.play().catchError((Object e) {
+        if (mounted) setState(() => error = 'فشل تشغيل الصوت: $e');
+      }));
     } catch (e) {
       if (mounted) {
         setState(() => error = 'تعذر تشغيل الملف: $e');

@@ -53,6 +53,7 @@ class _MemorizationPageState extends State<MemorizationPage> {
         review.remove(verse.key);
       } else {
         memorized.remove(verse.key);
+        completedToday.remove(verse.key);
         review.add(verse.key);
       }
     });

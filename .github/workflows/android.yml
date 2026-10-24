@@ -2,7 +2,7 @@ name: NoorQuran Android build
 on:
   workflow_dispatch:
   push:
-    branches: [main, feature/noorquran-original-vision, feature/quran-memorization-kids]
+    branches: [main, feature/noorquran-original-vision, feature/quran-memorization-kids, feature/mushaf-library-experience]
 permissions:
   contents: read
 jobs:
@@ -29,6 +29,6 @@ jobs:
       - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
         with:
-          name: NoorQuran-APK-Memorization-Kids
+          name: NoorQuran-APK-Mushaf-Library
           path: build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error

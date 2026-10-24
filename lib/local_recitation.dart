@@ -37,12 +37,11 @@ class _LocalRecitationPlayerState extends State<LocalRecitationPlayer> {
         throw const FormatException('Unable to access selected audio file');
       }
       await player.stop();
-      await player.setFilePath(file.path!);
       // A finite playlist repeats the chosen recording exactly N times.
       await player.setLoopMode(LoopMode.off);
-      await player.setAudioSource(ConcatenatingAudioSource(
-        children: List.generate(widget.repeats, (_) => AudioSource.file(file.path!)),
-      ));
+      await player.setAudioSources(
+        List.generate(widget.repeats, (_) => AudioSource.file(file.path!)),
+      );
       if (!mounted) return;
       setState(() => fileName = file.name);
       await player.play();

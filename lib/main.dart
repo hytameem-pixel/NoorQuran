@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'memorization.dart';
 
 void main() => runApp(const NoorApp());
 
@@ -184,6 +185,21 @@ class _NoorAppState extends State<NoorApp> {
                       subtitle: Text('سورة ${surahNames[int.parse(lastRead!.split(':')[0])-1]} — آية ${lastRead!.split(':')[1]}'),
                       onTap: () => _openReader(verses, jumpTo: lastRead),
                     )),
+                  const SizedBox(height: 12),
+                  Card.filled(child: ListTile(
+                    leading: const Icon(Icons.school_outlined),
+                    title: const Text('حفظ القرآن ومراجعته'),
+                    subtitle: const Text('تسميع ذاتي وتسجيل تقدم الحفظ'),
+                    onTap: () => Navigator.push(context, MaterialPageRoute<void>(
+                      builder: (_) => MemorizationPage(verses: verses))),
+                  )),
+                  Card.filled(child: ListTile(
+                    leading: const Icon(Icons.child_care),
+                    title: const Text('براعم نور القرآن'),
+                    subtitle: const Text('قسم حفظ القرآن للصغار بإشراف ولي الأمر'),
+                    onTap: () => Navigator.push(context, MaterialPageRoute<void>(
+                      builder: (_) => MemorizationPage(verses: verses, kidsMode: true))),
+                  )),
                   const SizedBox(height: 12),
                   const Text('سور القرآن الكريم', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   ...List.generate(114, (i) => ListTile(

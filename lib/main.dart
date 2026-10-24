@@ -194,8 +194,8 @@ class _NoorAppState extends State<NoorApp> {
                   const SizedBox(height: 16),
                   Card.filled(child: ListTile(
                     leading: const Icon(Icons.chrome_reader_mode_outlined),
-                    title: const Text('المصحف حسب صفحات المدينة'),
-                    subtitle: const Text('604 صفحة • فهرس الصفحات والأجزاء • الوضع الليلي'),
+                    title: const Text('فهرس صفحات مصحف المدينة'),
+                    subtitle: const Text('604 موضع صفحة • عرض الآيات كاملة • الوضع الليلي'),
                     onTap: () => Navigator.push(context, MaterialPageRoute<void>(
                       builder: (_) => MushafPagesPage(
                         verses: verses,

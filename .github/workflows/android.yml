@@ -2,7 +2,7 @@ name: NoorQuran Android build
 on:
   workflow_dispatch:
   push:
-    branches: [main, feature/noorquran-original-vision, feature/quran-memorization-kids, feature/mushaf-library-experience, feature/quality-hardening-v1, feature/mushaf-polish-and-content-foundations, fix/android-mushaf-audio-runtime, improvement/noorquran-quality-v05]
+    branches: [main, feature/noorquran-original-vision, feature/quran-memorization-kids, feature/mushaf-library-experience, feature/quality-hardening-v1, feature/mushaf-polish-and-content-foundations, fix/android-mushaf-audio-runtime, improvement/noorquran-quality-v05, feature/noorquran-rebuild-v06]
 permissions:
   contents: read
 jobs:
@@ -40,6 +40,8 @@ jobs:
       - run: flutter pub get
       - name: Verify Quran data
         run: python3 tools/verify_quran_bundle.py
+      - name: Validate offline reciter availability manifest
+        run: python3 -c "import json; d=json.load(open('assets/content/audio/reciters_manifest.json')); assert all(not r['verse_audio_available'] or (r['license_verified'] and r['tracks']) for r in d['reciters'])"
       - run: flutter analyze
       - run: flutter test
       - run: flutter build apk --release
@@ -53,7 +55,7 @@ jobs:
           unzip -t "$APK" | tail -n 1
       - uses: actions/upload-artifact@v4
         with:
-          name: NoorQuran-APK-Android-InstallFix-v051
+          name: NoorQuran-APK-Rebuild-SurahIndex
           path: |
             build/app/outputs/flutter-apk/app-release.apk
             apk-sha256.txt

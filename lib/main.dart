@@ -9,6 +9,7 @@ import 'local_data.dart';
 import 'mushaf_pages.dart';
 import 'quranic_duas.dart';
 import 'quran_diagnostics.dart';
+import 'surah_index.dart';
 
 void main() => runApp(const NoorApp());
 
@@ -276,12 +277,16 @@ class _NoorAppState extends State<NoorApp> {
                       builder: (_) => const IslamicLibraryPage())),
                   )),
                   const SizedBox(height: 12),
-                  const Text('سور القرآن الكريم', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  ...List.generate(114, (i) => ListTile(
-                    leading: CircleAvatar(child: Text('${i + 1}')),
-                    title: Text('سورة ${surahNames[i]}'),
-                    subtitle: Text('${verses.where((v) => v.surah == i + 1).length} آية'),
-                    onTap: () => _openReader(verses, surah: i + 1),
+                  Card.filled(child: ListTile(
+                    leading: const Icon(Icons.format_list_numbered),
+                    title: const Text('فهرس السور — ١١٤ سورة'),
+                    subtitle: const Text('ابحث واختر سورة للقراءة دون إنترنت'),
+                    trailing: const Icon(Icons.arrow_back_ios_new),
+                    onTap: () => Navigator.push(context, MaterialPageRoute<void>(
+                      builder: (_) => SurahIndexPage(
+                        verses: verses,
+                        onOpen: (n) => _openReader(verses, surah: n),
+                      ))),
                   )),
                 ]);
               case 1:

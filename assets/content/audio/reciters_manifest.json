@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "availability": "not_bundled",
+  "notice_ar": "لا توجد تسجيلات مرخصة مرفقة حاليًا؛ لا تعرض القراء باعتبارهم متاحين",
+  "reciters": [
+    {
+      "id": "maher_al_muaiqly",
+      "name_ar": "ماهر المعيقلي",
+      "priority": 1,
+      "verse_audio_available": false,
+      "license_verified": false,
+      "source_url": null,
+      "tracks": []
+    }
+  ]
+}

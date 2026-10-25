@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" role="img" aria-labelledby="title">
+<title id="title">رمز نور القرآن</title>
+<circle cx="40" cy="40" r="36" fill="#124d40" stroke="#d4b65f" stroke-width="2"/>
+<path d="M17 29c9-4 16-2 23 4v27c-7-6-14-8-23-4V29Z" fill="#f7f3e8" stroke="#d4b65f" stroke-width="2" stroke-linejoin="round"/>
+<path d="M63 29c-9-4-16-2-23 4v27c7-6 14-8 23-4V29Z" fill="#f7f3e8" stroke="#d4b65f" stroke-width="2" stroke-linejoin="round"/>
+<path d="M25 36c5-1 9 0 12 3M25 42c5-1 9 0 12 3m18-9c-5-1-9 0-12 3m12 3c-5-1-9 0-12 3" fill="none" stroke="#176b56" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M40 14l2.4 4.8 5.3.8-3.8 3.7.9 5.2-4.8-2.5-4.8 2.5.9-5.2-3.8-3.7 5.3-.8L40 14Z" fill="#d4b65f"/>
+</svg>

@@ -1,3 +1,4 @@
+// Cache generation v14: refresh the offline shell after app updates.
 importScripts('./runtime.js','./audio-cache-sw.js');
 const CORE=NoorRuntime.coreCache,ASSETS=NoorRuntime.coreAssets;
 self.addEventListener('install',e=>e.waitUntil((async()=>{try{const c=await caches.open(CORE);await c.addAll(ASSETS);await self.skipWaiting()}catch(e){await caches.delete(CORE);throw e}})()));

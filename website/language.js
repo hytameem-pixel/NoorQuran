@@ -53,7 +53,8 @@
     const root=document.body;
     if(!root){busy=false;return}
     document.documentElement.lang=locale==="ar"?"ar":locale;
-    document.documentElement.dir=locale==="ar"?"rtl":"ltr";\n    const title=document.querySelector("title"); if(title){if(!title.dataset.i18nOriginal)title.dataset.i18nOriginal=title.textContent;title.textContent=translated(title.dataset.i18nOriginal)}
+    document.documentElement.dir=locale==="ar"?"rtl":"ltr";
+    const title=document.querySelector("title"); if(title){if(!title.dataset.i18nOriginal)title.dataset.i18nOriginal=title.textContent;title.textContent=translated(title.dataset.i18nOriginal)}
     const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
     let node;
     while((node=walker.nextNode())){

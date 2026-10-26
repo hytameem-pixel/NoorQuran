@@ -25,7 +25,7 @@
       "مكتبة التلاوات":"Recitation library","٨ قراء، مع تنزيل اختياري للاستماع دون اتصال.":"Eight reciters, with optional downloads for offline listening.",
       "تفاسير وحديث وأذكار مع توثيق المصادر.":"Tafsir, hadith, and adhkar with source references.",
       "ملفات مستقلة، ومقاطع قصيرة، ومراجعة هادئة.":"Short, standalone lessons and calm review activities.",
-      "تثبيت الموقع على الهاتف":"Install on your phone","المصادر والإصدارات":"Sources and versions","الخصوصية":"Privacy",
+      "تثبيت الموقع على الهاتف":"Install on your phone","المصادر والإصدارات":"Sources and versions","الخصوصية":"Privacy","ملاحظة على الموقع: h.y.tameem@gmail.com":"Site feedback: h.y.tameem@gmail.com",
       "الدعم والبلاغات":"Support and feedback","تثبيت الموقع":"Install site","تجاوز إلى المحتوى":"Skip to content",
       "ابحث عن مادة":"Search materials","اختر القارئ":"Choose a reciter","السورة":"Surah","جارٍ فحص فهرس المواد…":"Loading the materials index…",
       "التنقل":"Navigation","الرئيسية | نور القرآن":"Home | Noor Quran","التطبيقات | نور القرآن":"Apps | Noor Quran",

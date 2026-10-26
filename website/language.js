@@ -13,7 +13,7 @@
       "رحلتك مع القرآن":"Your Quran journey","بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ":"In the name of Allah, the Most Compassionate, the Most Merciful",
       "بلا إعلانات":"Ad-free","إعدادات القراءة":"Reading settings","كل يوم، أقرب إلى القرآن":"Closer to the Quran, every day",
       "اقرأ، واستمع، وراجع وردك من موضعك الأخير":"Read, listen, and continue from where you left off",
-      "رفيقك في التلاوة والتدبّر":"Your companion for recitation and reflection","رحلة نور، وأثر يبقى":"A journey of light that leaves a lasting أثر",
+      "رفيقك في التلاوة والتدبّر":"Your companion for recitation and reflection","رحلة نور، وأثر يبقى":"A journey of light that leaves a lasting impact",
       "ابدأ بما يناسب وقتك. إنجازك محفوظ على هذا الجهاز، ويمكنك نسخه احتياطيًا.":"Start at your own pace. Your progress stays on this device and can be backed up.",
       "متابعة القراءة":"Continue reading","دليلك لأول زيارة":"A guide for your first visit","ابدأ بقراءة المصحف":"Start reading the Quran",
       "أو افتح فهرس السور والصفحات.":"or open the surah and page index.","استفد من":"Explore the",

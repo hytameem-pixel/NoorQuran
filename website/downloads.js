@@ -6,7 +6,7 @@ try{if(JSON.parse(localStorage.getItem('noor-dark')))document.body.classList.add
 document.getElementById('theme').onclick=()=>{document.body.classList.toggle('dark');try{localStorage.setItem('noor-dark',JSON.stringify(document.body.classList.contains('dark')))}catch{}};
 document.querySelectorAll('nav button[data-view]').forEach(b=>b.onclick=()=>{location.href='./#'+b.dataset.view});
 document.getElementById('settings').onclick=()=>{body.innerHTML='<h2>التنزيل على الهاتف</h2><p>حضّر الملف وانتظر اكتمال الفحص، ثم اضغط حفظ APK. إذا فتحت الموقع داخل تطبيق آخر، افتح صفحة التحميل في Chrome وسجّل الدخول بالحساب المسموح.</p>';modal.showModal()};
-document.getElementById('sources').onclick=()=>{body.innerHTML='<h2>الملكية والمصادر</h2><p>تصميم الموقع وبرمجته: يحيى يحيى راجح تميم.</p><p>صدقة جارية عن روح والدي وعن روحي، يحيى يحيى راجح تميم.</p><p>تبقى حقوق النصوص والخطوط والمراجع لأصحابها، ومصادرها موثقة داخل الموقع. APK نسخة اختبار محدثة للغلاف السابق، ولم تُختبر على هاتف فعلي.</p>';modal.showModal()};
+document.getElementById('sources').onclick=()=>{body.innerHTML='<h2>الملكية والمصادر</h2><p>تصميم الموقع وبرمجته: يحيى يحيى راجح تميم.</p><p>صدقة جارية عن روح والداي وعن روحي، يحيى يحيى راجح تميم.</p><p>تبقى حقوق النصوص والخطوط والمراجع لأصحابها، ومصادرها موثقة داخل الموقع. APK نسخة اختبار محدثة للغلاف السابق، ولم تُختبر على هاتف فعلي.</p>';modal.showModal()};
 document.querySelector('[data-close]')?.addEventListener('click',()=>modal.close());
 const native=()=>!!window.NoorRuntime?.isNative?.();
 const page=new URL('apps/',location.href).href;

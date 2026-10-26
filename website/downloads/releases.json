@@ -1,1 +1,27 @@
-{"version":"2.0","web_version":"2.0.0","channel":"test","android_application_id":"com.tameem.noorquran.modern","android_min_sdk":24,"android_device_tested":false,"android_shell_recompiled":false,"ios_installable_available":false,"files":[{"filename":"NoorQuran-Android-2.0-test.apk","bytes":25467206,"sha256":"f4f88fcf715e8fa91aeb180e1f1f67cec0f24443739b493b168ac8d29c0ad739"},{"filename":"NoorQuran-Android-iOS-Source-2.0.zip","bytes":25543626,"sha256":"dd328580b8613cd104702ef63802f2d04e89614edb4805eb503febfdf1b16b4e"}]}
+{
+  "version": "2.0",
+  "web_version": "2.0.0",
+  "channel": "test",
+  "android_application_id": "com.tameem.noorquran.modern",
+  "android_min_sdk": 24,
+  "android_device_tested": false,
+  "android_shell_recompiled": false,
+  "ios_installable_available": false,
+  "files": [
+    {
+      "filename": "NoorQuran-Android-2.0-test.apk",
+      "bytes": 25467206,
+      "sha256": "f4f88fcf715e8fa91aeb180e1f1f67cec0f24443739b493b168ac8d29c0ad739",
+      "hosting": "Sites original",
+      "redistribution_license": "Not documented"
+    },
+    {
+      "filename": "NoorQuran-Android-iOS-Source-2.0.zip",
+      "bytes": 25543626,
+      "sha256": "dd328580b8613cd104702ef63802f2d04e89614edb4805eb503febfdf1b16b4e",
+      "hosting": "Sites original",
+      "redistribution_license": "Not documented"
+    }
+  ],
+  "hosting_note": "The APK and Android/iOS source ZIP are served from the original Sites host. Redistribution rights outside that host are not documented, so these binaries are not mirrored into the GitHub repository."
+}
